@@ -6,6 +6,7 @@ namespace ATMoviess.Models
     {
         public int PageNumber { get; set; }
         public int TotalPages { get; set; }
-        public MoviesService UpcomingMoviesService { get; set; }
+        public bool IsSearch { get; set; }
+        public string SearchString { get; set; }
     }
 }

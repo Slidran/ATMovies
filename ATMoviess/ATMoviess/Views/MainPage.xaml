@@ -1,32 +1,40 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:local="clr-namespace:ATMoviess"
+             xmlns:behaviors="clr-namespace:ATMoviess.Behaviors"
              xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+             xmlns:converter="clr-namespace:ATMoviess.Converters"
              x:Class="ATMoviess.Views.MainPage"
              Title="Upcoming movies">
 
-    <StackLayout>
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converter:InverseBooleanConverter x:Key="InverseBooleanConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    
+    <StackLayout VerticalOptions="FillAndExpand">
+
+        <ActivityIndicator VerticalOptions="FillAndExpand" Scale="0.15" IsVisible="{Binding IsLoading}" Color="#3FACFF" IsRunning="True" />
+
+        <StackLayout HorizontalOptions="FillAndExpand" IsVisible="{Binding IsLoading, Converter={StaticResource InverseBooleanConverter}}">
+            <SearchBar x:Name="SearchBar" Placeholder="Movie name" FontFamily="{StaticResource NunitoRegular}" SearchCommand="{Binding SearchCommand}" SearchCommandParameter="{Binding Text, Source={x:Reference SearchBar}}" />
+        </StackLayout>
+
         <ListView SeparatorVisibility="Default"
                   HasUnevenRows="False"
                   ItemsSource="{Binding UpcomingMoviesList}"
                   RowHeight="150"
-                  ItemSelected="ListView_ItemSelected">
-            <ListView.Header>
-                <StackLayout>
-                    <SearchBar x:Name="SearchBar" Margin="0,0,8,8" Placeholder="Movie name" SearchCommand="{Binding SearchCommand}" SearchCommandParameter="{Binding Text, Source={x:Reference SearchBar}}" />
-                    <Button Text="Back" IsVisible="{Binding ShowBackButton}" Command="{Binding BackToMainPageCommand}" />
-                </StackLayout>
-            </ListView.Header>
+                  behaviors:ItemTappedAttachedBehavior.Command="{Binding NavigateToDetailsCommand}"
+                  IsVisible="{Binding IsLoading, Converter={StaticResource InverseBooleanConverter}}">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
                         <Grid>
                             <ffimageloading:CachedImage 
-                                VerticalOptions="Start" 
+                                VerticalOptions="CenterAndExpand" 
                                 Source="{Binding Backdrop_path}"
                                 Aspect="AspectFill"
-                                DownsampleToViewSize="False"
                                 Opacity="0.3"
                             />
                             <StackLayout Padding="15,10" HorizontalOptions="FillAndExpand">
@@ -49,7 +57,7 @@
             </ListView.ItemTemplate>
             <ListView.Footer>
                 <StackLayout>
-                    <Button Text="next" IsVisible="{Binding ShowNextButton}" Command="{Binding NextPageCommand}" />
+                    <Button Text="Next Page" BackgroundColor="Transparent" TextColor="#3FACFF" IsVisible="{Binding ShowNextButton}" Command="{Binding NextPageCommand}" />
                 </StackLayout>
             </ListView.Footer>
         </ListView>

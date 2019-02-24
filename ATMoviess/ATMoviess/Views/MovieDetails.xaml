@@ -18,10 +18,13 @@
             />
             </StackLayout>
             <StackLayout>
-                <Label Text="{Binding MovieDetails.Title}" HorizontalTextAlignment="Center" FontSize="24" />
+                <Label Text="{Binding MovieDetails.Title}" FontAttributes="Bold" HorizontalTextAlignment="Center" FontSize="24" />
+                <StackLayout HeightRequest="2" BackgroundColor="#cccccc" HorizontalOptions="FillAndExpand" Margin="16,0" />
                 <Label Text="{Binding MovieDetails.Genres}" HorizontalTextAlignment="Center" FontSize="16" />
-                <Label Text="{Binding MovieDetails.Overview}" HorizontalTextAlignment="Center" FontSize="16" Margin="16,8" />
+                <StackLayout HeightRequest="2" BackgroundColor="#cccccc" HorizontalOptions="FillAndExpand" Margin="16,0" />
                 <Label Text="{Binding MovieDetails.ReleaseDate, StringFormat='{0:dddd, MMMM dd - yyyy}'}}" HorizontalTextAlignment="Center" FontSize="16" />
+                <StackLayout HeightRequest="2" BackgroundColor="#cccccc" HorizontalOptions="FillAndExpand" Margin="16,0" />
+                <Label Text="{Binding MovieDetails.Overview}" HorizontalTextAlignment="Center" FontSize="16" Margin="16,8" />
             </StackLayout>
         </StackLayout>
     </ScrollView>

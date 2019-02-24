@@ -21,23 +21,33 @@ namespace ATMoviess.ViewModels
             NavigateToDetailsCommand = new Command(NavigateToDetails);
             NextPageCommand = new Command(NextPage);
             SearchCommand = new Command<string>(SearchMovies);
-            BackToMainPageCommand = new Command(BackToMainPage);
         }
 
         public async override Task InitializeAsync(object navigationData)
         {
+            IsLoading = true;
+
             MainPageModel = navigationData != null ? (MainPageModel)navigationData : new MainPageModel();
             
             PageNumber = MainPageModel.PageNumber == 0 ? 1 : MainPageModel.PageNumber;
-            
-            MainPageModel.UpcomingMoviesService = MainPageModel.UpcomingMoviesService == null ? new MoviesService() : MainPageModel.UpcomingMoviesService;
 
-            var result = await MainPageModel.UpcomingMoviesService.GetUpcomingMoviesAsync(PageNumber);
-            MainPageModel.TotalPages = result.Total_pages;
-            UpcomingMoviesList = result.Results;
+            UpcomingMoviesModel result = null;
 
-            ShowNextButton = MainPageModel.PageNumber < MainPageModel.TotalPages ? true : false;
-            ShowBackButton = false;
+            if (MainPageModel.IsSearch)
+            {
+                result = await MoviesService.SearchMoviesAsync(MainPageModel.SearchString);
+                UpcomingMoviesList = result.Results;
+                ShowNextButton = false;
+            }
+            else
+            {
+                result = await MoviesService.GetUpcomingMoviesAsync();
+                UpcomingMoviesList = result.Results;
+                MainPageModel.TotalPages = result.Total_pages;
+                ShowNextButton = MainPageModel.PageNumber < MainPageModel.TotalPages ? true : false;
+            }
+
+            IsLoading = false;
         }
 
         #region Properties
@@ -45,7 +55,6 @@ namespace ATMoviess.ViewModels
         public Command NavigateToDetailsCommand { get; set; }
         public Command NextPageCommand { get; set; }
         public Command SearchCommand { get; set; }
-        public Command BackToMainPageCommand { get; set; }
 
         private MainPageModel _mainPageModel;
         public MainPageModel MainPageModel
@@ -68,11 +77,11 @@ namespace ATMoviess.ViewModels
             set => SetProperty(ref _showNextButton, value);
         }
 
-        private bool _showBackButton;
-        public bool ShowBackButton
+        private bool _isLoading;
+        public bool IsLoading
         {
-            get => _showBackButton;
-            set => SetProperty(ref _showBackButton, value);
+            get => _isLoading;
+            set => SetProperty(ref _isLoading, value);
         }
 
         private List<Result> _upcomingMoviesList;
@@ -86,34 +95,24 @@ namespace ATMoviess.ViewModels
 
         #region Methods
 
-        public void NavigateToDetails(object parameter)
+        public async void NavigateToDetails(object parameter)
         {
-            navigation.NavigateToAsync<MovieDetailsViewModel>(parameter);
+            await navigation.NavigateToAsync<MovieDetailsViewModel>(parameter);
         }
 
-        public void NextPage()
+        public async void NextPage()
         {
+            MainPageModel.IsSearch = false;
+            MainPageModel.SearchString = string.Empty;
             MainPageModel.PageNumber = PageNumber + 1;
-            navigation.NavigateToAsync<MainPageViewModel>(MainPageModel);
+            await navigation.NavigateToAsync<MainPageViewModel>(MainPageModel);
         }
 
         public async void SearchMovies(string param)
         {
-            var result = await MainPageModel.UpcomingMoviesService.SearchMoviesAsync(param);
-            UpcomingMoviesList = result.Results;
-            ShowNextButton = false;
-            ShowBackButton = true;
-        }
-
-        public async void BackToMainPage()
-        {
-            navigation.InitializeAsync();
-            //PageNumber = 1;
-            //var result = await MainPageModel.UpcomingMoviesService.GetUpcomingMoviesAsync(PageNumber);
-            //MainPageModel.TotalPages = result.Total_pages;
-            //UpcomingMoviesList = result.Results;
-            //ShowNextButton = true;
-            //ShowBackButton = false;
+            MainPageModel.IsSearch = true;
+            MainPageModel.SearchString = param;
+            await navigation.NavigateToAsync<MainPageViewModel>(MainPageModel);
         }
 
         #endregion

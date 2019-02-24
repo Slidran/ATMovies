@@ -6,7 +6,7 @@ namespace ATMoviess.Services.Navigation
 {
     public interface INavigationService
     {
-        void InitializeAsync();
+        Task InitializeAsync();
         Task NavigateStringToAsync(string navString);
         Task NavigateToAsync<TViewModel>() where TViewModel : ViewModelBase;
         Task NavigateToAsync<TViewModel>(object parameter) where TViewModel : ViewModelBase;

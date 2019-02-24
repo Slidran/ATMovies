@@ -7,18 +7,12 @@ using System.Threading.Tasks;
 
 namespace ATMoviess.Services
 {
-    public abstract class CommunicationService
+    public static class CommunicationService
     {
-        private string API_URL { get; set; }
-        private string API_KEY { get; set; }
+        private const string API_URL = "https://api.themoviedb.org/3";
+        private const string API_KEY = "1f54bd990f1cdfb230adb312546d765d";
 
-        public CommunicationService(string apiURL, string apiKey = "")
-        {
-            API_URL = apiURL;
-            API_KEY = apiKey;
-        }
-
-        protected async Task<HttpResponseMessage> GetAsync(string endpoint, Dictionary<string, object> parameters)
+        public static async Task<HttpResponseMessage> GetAsync(string endpoint, Dictionary<string, object> parameters)
         {
             HttpClientHandler handler = new HttpClientHandler();
             HttpResponseMessage result = null;

@@ -9,42 +9,51 @@ using System.Threading.Tasks;
 
 namespace ATMoviess.Services
 {
-    public class MoviesService : CommunicationService
+    public static class MoviesService
     {
-        private const string TMDB_API_URL = "https://api.themoviedb.org/3";
-        private const string TMDB_API_KEY = "1f54bd990f1cdfb230adb312546d765d";
-
-        private List<Genre> GenresList { get; set; }
-
-        public MoviesService() : base(TMDB_API_URL, TMDB_API_KEY)
-        {
-        }
-
-        private async Task GetGenresAsync()
+        private static List<Genre> GenresList { get; set; }
+        
+        private static async Task GetGenresAsync()
         {
             var parameters = new Dictionary<string, object>();
             parameters.Add("language", "en-US");
 
-            var content = await GetAsync("genre/movie/list", parameters);
+            var content = await CommunicationService.GetAsync("genre/movie/list", parameters);
             var response = await content.Content.ReadAsStringAsync();
 
             GenresList = JsonConvert.DeserializeObject<GenresListModel>(response).Genres;
         }
 
-        public async Task<UpcomingMoviesModel> GetUpcomingMoviesAsync(int pageNumber)
+        public static async Task<UpcomingMoviesModel> GetUpcomingMoviesAsync()
         {
+            
             var parameters = new Dictionary<string, object>();
             parameters.Add("language", "en-US");
-            parameters.Add("page", pageNumber.ToString());
+            parameters.Add("page", 1);
+            //parameters.Add("region", "US");
 
-            var content = await GetAsync("movie/upcoming", parameters);
+            var content = await CommunicationService.GetAsync("movie/upcoming", parameters);
             var response = await content.Content.ReadAsStringAsync();
 
             var result = JsonConvert.DeserializeObject<UpcomingMoviesModel>(response);
 
+            for (int i = 2; i <= result.Total_pages; i++)
+            {
+                parameters = new Dictionary<string, object>();
+                parameters.Add("language", "en-US");
+                parameters.Add("page", i);
+
+                content = await CommunicationService.GetAsync("movie/upcoming", parameters);
+                response = await content.Content.ReadAsStringAsync();
+
+                var result2 = JsonConvert.DeserializeObject<UpcomingMoviesModel>(response);
+
+                result.Results.AddRange(result2.Results);
+            }
+
             if (GenresList == null)
                 await GetGenresAsync();
-
+            
             foreach (var item in result.Results)
             {
                 foreach (var item2 in item.Genre_ids)
@@ -54,16 +63,18 @@ namespace ATMoviess.Services
                 }
             }
 
+            result.Results = result.Results.Where(x => x.ReleaseDate >= DateTime.Today).OrderBy(x => x.ReleaseDate).ToList();
+
             return result;
         }
 
-        public async Task<UpcomingMoviesModel> SearchMoviesAsync(string movieName)
+        public static async Task<UpcomingMoviesModel> SearchMoviesAsync(string movieName)
         {
             var parameters = new Dictionary<string, object>();
             parameters.Add("language", "en-US");
             parameters.Add("query", movieName);
 
-            var content = await GetAsync("search/movie", parameters);
+            var content = await CommunicationService.GetAsync("search/movie", parameters);
             var response = await content.Content.ReadAsStringAsync();
 
             var result = JsonConvert.DeserializeObject<UpcomingMoviesModel>(response);

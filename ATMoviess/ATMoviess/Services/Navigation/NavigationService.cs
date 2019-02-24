@@ -46,10 +46,10 @@ namespace ATMoviess.Services.Navigation
             return page;
         }
 
-        public async void InitializeAsync()
+        public async Task InitializeAsync()
         {
             Page page = CreateAndBindPage(typeof(MainPageViewModel));
-            Application.Current.MainPage = new NavigationPage(page);
+            Application.Current.MainPage = new CustomNavigationPage(page);
             await (page.BindingContext as ViewModelBase).InitializeAsync(null);
         }
 
@@ -99,7 +99,7 @@ namespace ATMoviess.Services.Navigation
         {
             Page page = CreateAndBindPage(viewModelType);
             
-            var nav = Application.Current.MainPage as NavigationPage;
+            var nav = Application.Current.MainPage as CustomNavigationPage;
             Device.BeginInvokeOnMainThread(async () =>
             {
                 await nav.PushAsync(page);

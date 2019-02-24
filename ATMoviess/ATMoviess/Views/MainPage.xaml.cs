@@ -14,11 +14,5 @@ namespace ATMoviess.Views
         {
             InitializeComponent();
         }
-
-        private void ListView_ItemSelected(object sender, SelectedItemChangedEventArgs e)
-        {
-            var viewModel = BindingContext as MainPageViewModel;
-            viewModel.NavigateToDetailsCommand.Execute(e.SelectedItem);
-        }
     }
 }
