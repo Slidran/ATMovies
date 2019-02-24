@@ -27,6 +27,7 @@ namespace ATMoviess.Models
             {
                 if (string.IsNullOrEmpty(_poster_path))
                     return "noposter.png";
+
                 return "http://image.tmdb.org/t/p/w500" + _poster_path;
             }
             set
@@ -56,13 +57,35 @@ namespace ATMoviess.Models
             }
         }
         public bool Adult { get; set; }
-        public string Overview { get; set; }
+        private string _overview { get; set; }
+        public string Overview
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(_overview))
+                    return "No overview found.";
+                else
+                    return _overview;
+            }
+            set
+            {
+                _overview = value;
+            }
+        }
         public string Release_date { get; set; }
         public DateTime ReleaseDate
         {
             get
             {
-                return Convert.ToDateTime(Release_date);
+                try
+                {
+                    var convertedDate = Convert.ToDateTime(Release_date);
+                    return convertedDate;
+                }
+                catch (Exception ex)
+                {
+                    return DateTime.MinValue;
+                }
             }
         }
         public string Genres { get; set; }

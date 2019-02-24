@@ -96,6 +96,20 @@
     <None Include="Entitlements.plist" />
     <None Include="Info.plist" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <BundleResource Include="Resources\Nunito-Black.ttf" />
+    <BundleResource Include="Resources\Nunito-BlackItalic.ttf" />
+    <BundleResource Include="Resources\Nunito-Bold.ttf" />
+    <BundleResource Include="Resources\Nunito-BoldItalic.ttf" />
+    <BundleResource Include="Resources\Nunito-ExtraBold.ttf" />
+    <BundleResource Include="Resources\Nunito-ExtraBoldItalic.ttf" />
+    <BundleResource Include="Resources\Nunito-ExtraLight.ttf" />
+    <BundleResource Include="Resources\Nunito-ExtraLightItalic.ttf" />
+    <BundleResource Include="Resources\Nunito-Italic.ttf" />
+    <BundleResource Include="Resources\Nunito-Light.ttf" />
+    <BundleResource Include="Resources\Nunito-LightItalic.ttf" />
+    <BundleResource Include="Resources\Nunito-Regular.ttf" />
+    <BundleResource Include="Resources\Nunito-SemiBold.ttf" />
+    <BundleResource Include="Resources\Nunito-SemiBoldItalic.ttf" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Resources\LaunchScreen.storyboard" />
@@ -160,5 +174,8 @@
       <Project>{DBA5AF16-F99A-464F-A502-31D484C14649}</Project>
       <Name>ATMoviess</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\OFL.txt" />
   </ItemGroup>
 </Project>

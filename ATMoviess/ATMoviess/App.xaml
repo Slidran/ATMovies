@@ -44,5 +44,10 @@
             <Setter Property="FontSize" Value="16" />
         </Style>
 
+        <Style TargetType="SearchBar">
+            <Setter Property="FontFamily" Value="{StaticResource NunitoRegular}" />
+            <Setter Property="FontSize" Value="16" />
+        </Style>
+
     </Application.Resources>
 </Application>

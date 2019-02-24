@@ -5,7 +5,7 @@
              xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
              xmlns:converter="clr-namespace:ATMoviess.Converters"
              x:Class="ATMoviess.Views.MainPage"
-             Title="Upcoming movies">
+             Title="{Binding Model.Title}">
 
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -17,10 +17,10 @@
 
         <ActivityIndicator VerticalOptions="FillAndExpand" Scale="0.15" IsVisible="{Binding IsLoading}" Color="#3FACFF" IsRunning="True" />
 
-        <StackLayout HorizontalOptions="FillAndExpand" IsVisible="{Binding IsLoading, Converter={StaticResource InverseBooleanConverter}}">
-            <SearchBar x:Name="SearchBar" Placeholder="Movie name" FontFamily="{StaticResource NunitoRegular}" SearchCommand="{Binding SearchCommand}" SearchCommandParameter="{Binding Text, Source={x:Reference SearchBar}}" />
+        <StackLayout Spacing="0" IsVisible="{Binding IsLoading, Converter={StaticResource InverseBooleanConverter}}">
+            <SearchBar x:Name="SearchBar" Placeholder="Movie name" SearchCommand="{Binding SearchCommand}" SearchCommandParameter="{Binding Text, Source={x:Reference SearchBar}}" IsVisible="{Binding Model.IsSearchVisible}" />
         </StackLayout>
-
+        
         <ListView SeparatorVisibility="Default"
                   HasUnevenRows="False"
                   ItemsSource="{Binding UpcomingMoviesList}"
@@ -55,12 +55,8 @@
                     </ViewCell>
                 </DataTemplate>
             </ListView.ItemTemplate>
-            <ListView.Footer>
-                <StackLayout>
-                    <Button Text="Next Page" BackgroundColor="Transparent" TextColor="#3FACFF" IsVisible="{Binding ShowNextButton}" Command="{Binding NextPageCommand}" />
-                </StackLayout>
-            </ListView.Footer>
         </ListView>
+        
     </StackLayout>
 
 </ContentPage>

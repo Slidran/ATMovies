@@ -30,7 +30,6 @@ namespace ATMoviess.Services
             var parameters = new Dictionary<string, object>();
             parameters.Add("language", "en-US");
             parameters.Add("page", 1);
-            //parameters.Add("region", "US");
 
             var content = await CommunicationService.GetAsync("movie/upcoming", parameters);
             var response = await content.Content.ReadAsStringAsync();
@@ -61,6 +60,10 @@ namespace ATMoviess.Services
                     var genre = GenresList.Where(x => x.Id == item2).FirstOrDefault();
                     item.Genres = item2 == item.Genre_ids.Last() ? item.Genres + genre.Name : item.Genres + genre.Name + ", ";
                 }
+                if (string.IsNullOrEmpty(item.Genres))
+                {
+                    item.Genres = "No genres found";
+                }
             }
 
             result.Results = result.Results.Where(x => x.ReleaseDate >= DateTime.Today).OrderBy(x => x.ReleaseDate).ToList();
@@ -89,7 +92,13 @@ namespace ATMoviess.Services
                     var genre = GenresList.Where(x => x.Id == item2).FirstOrDefault();
                     item.Genres = item2 == item.Genre_ids.Last() ? item.Genres + genre.Name : item.Genres + genre.Name + ", ";
                 }
+                if (string.IsNullOrEmpty(item.Genres))
+                {
+                    item.Genres = "No genres found";
+                }
             }
+
+            result.Results = result.Results.OrderBy(x => x.ReleaseDate).ToList();
 
             return result;
         }

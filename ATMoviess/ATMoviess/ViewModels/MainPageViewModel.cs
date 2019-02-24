@@ -19,7 +19,6 @@ namespace ATMoviess.ViewModels
             navigation = _navigation;
 
             NavigateToDetailsCommand = new Command(NavigateToDetails);
-            NextPageCommand = new Command(NextPage);
             SearchCommand = new Command<string>(SearchMovies);
         }
 
@@ -27,24 +26,23 @@ namespace ATMoviess.ViewModels
         {
             IsLoading = true;
 
-            MainPageModel = navigationData != null ? (MainPageModel)navigationData : new MainPageModel();
-            
-            PageNumber = MainPageModel.PageNumber == 0 ? 1 : MainPageModel.PageNumber;
+            Model = navigationData != null ? (MainPageModel)navigationData : new MainPageModel();
 
             UpcomingMoviesModel result = null;
 
-            if (MainPageModel.IsSearch)
+            if (!string.IsNullOrEmpty(Model.SearchString))
             {
-                result = await MoviesService.SearchMoviesAsync(MainPageModel.SearchString);
+                Model.Title = "Search";
+                Model.IsSearchVisible = false;
+                result = await MoviesService.SearchMoviesAsync(Model.SearchString);
                 UpcomingMoviesList = result.Results;
-                ShowNextButton = false;
             }
             else
             {
+                Model.Title = "Upcoming movies";
+                Model.IsSearchVisible = true;
                 result = await MoviesService.GetUpcomingMoviesAsync();
                 UpcomingMoviesList = result.Results;
-                MainPageModel.TotalPages = result.Total_pages;
-                ShowNextButton = MainPageModel.PageNumber < MainPageModel.TotalPages ? true : false;
             }
 
             IsLoading = false;
@@ -53,28 +51,13 @@ namespace ATMoviess.ViewModels
         #region Properties
 
         public Command NavigateToDetailsCommand { get; set; }
-        public Command NextPageCommand { get; set; }
         public Command SearchCommand { get; set; }
 
-        private MainPageModel _mainPageModel;
-        public MainPageModel MainPageModel
+        private MainPageModel _model;
+        public MainPageModel Model
         {
-            get => _mainPageModel;
-            set => SetProperty(ref _mainPageModel, value);
-        }
-
-        private int _pageNumber;
-        public int PageNumber
-        {
-            get => _pageNumber;
-            set => SetProperty(ref _pageNumber, value);
-        }
-
-        private bool _showNextButton;
-        public bool ShowNextButton
-        {
-            get => _showNextButton;
-            set => SetProperty(ref _showNextButton, value);
+            get => _model;
+            set => SetProperty(ref _model, value);
         }
 
         private bool _isLoading;
@@ -100,19 +83,10 @@ namespace ATMoviess.ViewModels
             await navigation.NavigateToAsync<MovieDetailsViewModel>(parameter);
         }
 
-        public async void NextPage()
-        {
-            MainPageModel.IsSearch = false;
-            MainPageModel.SearchString = string.Empty;
-            MainPageModel.PageNumber = PageNumber + 1;
-            await navigation.NavigateToAsync<MainPageViewModel>(MainPageModel);
-        }
-
         public async void SearchMovies(string param)
         {
-            MainPageModel.IsSearch = true;
-            MainPageModel.SearchString = param;
-            await navigation.NavigateToAsync<MainPageViewModel>(MainPageModel);
+            Model.SearchString = param;
+            await navigation.NavigateToAsync<MainPageViewModel>(Model);
         }
 
         #endregion
