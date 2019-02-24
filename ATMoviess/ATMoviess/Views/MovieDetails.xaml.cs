@@ -5,11 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
-namespace ATMoviess
+namespace ATMoviess.Views
 {
-    public partial class MainPage : ContentPage
+    public partial class MovieDetails : ContentPage
     {
-        public MainPage()
+        public MovieDetails()
         {
             InitializeComponent();
         }

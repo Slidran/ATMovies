@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:ATMoviess"
+             xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+             x:Class="ATMoviess.Views.MovieDetails"
+             Title="{Binding MovieDetails.Title}">
+
+    <ScrollView>
+        <StackLayout>
+            <StackLayout>
+                <ffimageloading:CachedImage 
+                VerticalOptions="Start" 
+                Source="{Binding MovieDetails.Poster_path}"
+                Aspect="AspectFit"
+                HeightRequest="300"
+                Margin="0,8,0,0"
+            />
+            </StackLayout>
+            <StackLayout>
+                <Label Text="{Binding MovieDetails.Title}" HorizontalTextAlignment="Center" FontSize="24" />
+                <Label Text="{Binding MovieDetails.Genres}" HorizontalTextAlignment="Center" FontSize="16" />
+                <Label Text="{Binding MovieDetails.Overview}" HorizontalTextAlignment="Center" FontSize="16" Margin="16,8" />
+                <Label Text="{Binding MovieDetails.ReleaseDate, StringFormat='{0:dddd, MMMM dd - yyyy}'}}" HorizontalTextAlignment="Center" FontSize="16" />
+            </StackLayout>
+        </StackLayout>
+    </ScrollView>
+</ContentPage>

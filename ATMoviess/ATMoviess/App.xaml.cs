@@ -1,4 +1,7 @@
-﻿using System;
+﻿using ATMoviess.Services;
+using ATMoviess.Services.Navigation;
+using ATMoviess.Views;
+using System;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -10,8 +13,9 @@ namespace ATMoviess
         public App()
         {
             InitializeComponent();
-
-            MainPage = new MainPage();
+            
+            var navigationService = Locator.Instance.Resolve<INavigationService>();
+            navigationService.InitializeAsync();
         }
 
         protected override void OnStart()
