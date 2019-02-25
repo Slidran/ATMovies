@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
@@ -14,7 +14,7 @@
     
     <StackLayout VerticalOptions="FillAndExpand">
 
-        <ActivityIndicator VerticalOptions="FillAndExpand" Scale="0.15" IsVisible="{Binding IsLoading}" Color="#3FACFF" IsRunning="True" />
+        <ActivityIndicator VerticalOptions="FillAndExpand" HeightRequest="100" WidthRequest="100" IsVisible="{Binding IsLoading}" Color="#3FACFF" IsRunning="True" />
 
         <StackLayout Spacing="0" IsVisible="{Binding IsLoading, Converter={StaticResource InverseBooleanConverter}}">
             <SearchBar x:Name="SearchBar" Placeholder="Movie title" TextChanged="SearchBar_TextChanged" />
