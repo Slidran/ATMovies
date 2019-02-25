@@ -9,11 +9,15 @@ using System.Threading.Tasks;
 
 namespace ATMoviess.Services
 {
-    public static class MoviesService
+    public class MoviesService
     {
-        private static List<Genre> GenresList { get; set; }
+        private List<Genre> GenresList { get; set; }
         
-        private static async Task GetGenresAsync()
+        /// <summary>
+        /// Gets the list of genres
+        /// </summary>
+        /// <returns></returns>
+        private async Task GetGenresAsync()
         {
             var parameters = new Dictionary<string, object>();
             parameters.Add("language", "en-US");
@@ -23,8 +27,13 @@ namespace ATMoviess.Services
 
             GenresList = JsonConvert.DeserializeObject<GenresListModel>(response).Genres;
         }
-
-        public static async Task<UpcomingMoviesModel> GetUpcomingMoviesAsync()
+        
+        /// <summary>
+        /// Gets the the whole list of upcoming movies from the TMDB database.
+        /// Orders the list by release date. Does not filter region.
+        /// </summary>
+        /// <returns>Ordered list of upcoming movies</returns>
+        public async Task<List<Result>> GetUpcomingMoviesAsync()
         {
             
             var parameters = new Dictionary<string, object>();
@@ -45,9 +54,9 @@ namespace ATMoviess.Services
                 content = await CommunicationService.GetAsync("movie/upcoming", parameters);
                 response = await content.Content.ReadAsStringAsync();
 
-                var result2 = JsonConvert.DeserializeObject<UpcomingMoviesModel>(response);
+                var moreResults = JsonConvert.DeserializeObject<UpcomingMoviesModel>(response);
 
-                result.Results.AddRange(result2.Results);
+                result.Results.AddRange(moreResults.Results);
             }
 
             if (GenresList == null)
@@ -68,10 +77,15 @@ namespace ATMoviess.Services
 
             result.Results = result.Results.Where(x => x.ReleaseDate >= DateTime.Today).OrderBy(x => x.ReleaseDate).ToList();
 
-            return result;
+            return result.Results;
         }
 
-        public static async Task<UpcomingMoviesModel> SearchMoviesAsync(string movieName)
+        /// <summary>
+        /// Searches for movies in the whole TMDB database. NOT BEING USED.
+        /// </summary>
+        /// <param name="movieName">Movie title, full or partial</param>
+        /// <returns></returns>
+        public async Task<UpcomingMoviesModel> SearchMoviesAsync(string movieName)
         {
             var parameters = new Dictionary<string, object>();
             parameters.Add("language", "en-US");

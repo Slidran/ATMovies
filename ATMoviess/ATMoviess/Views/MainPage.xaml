@@ -1,11 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:behaviors="clr-namespace:ATMoviess.Behaviors"
              xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
              xmlns:converter="clr-namespace:ATMoviess.Converters"
              x:Class="ATMoviess.Views.MainPage"
-             Title="{Binding Model.Title}">
+             Title="Upcoming movies">
 
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -18,14 +17,14 @@
         <ActivityIndicator VerticalOptions="FillAndExpand" Scale="0.15" IsVisible="{Binding IsLoading}" Color="#3FACFF" IsRunning="True" />
 
         <StackLayout Spacing="0" IsVisible="{Binding IsLoading, Converter={StaticResource InverseBooleanConverter}}">
-            <SearchBar x:Name="SearchBar" Placeholder="Movie name" SearchCommand="{Binding SearchCommand}" SearchCommandParameter="{Binding Text, Source={x:Reference SearchBar}}" IsVisible="{Binding Model.IsSearchVisible}" />
+            <SearchBar x:Name="SearchBar" Placeholder="Movie title" TextChanged="SearchBar_TextChanged" />
         </StackLayout>
         
         <ListView SeparatorVisibility="Default"
                   HasUnevenRows="False"
                   ItemsSource="{Binding UpcomingMoviesList}"
                   RowHeight="150"
-                  behaviors:ItemTappedAttachedBehavior.Command="{Binding NavigateToDetailsCommand}"
+                  ItemTapped="ListView_ItemTapped"
                   IsVisible="{Binding IsLoading, Converter={StaticResource InverseBooleanConverter}}">
             <ListView.ItemTemplate>
                 <DataTemplate>

@@ -19,12 +19,12 @@ namespace ATMoviess.Services
 
             using (var client = new HttpClient(handler))
             {
-                var URL = string.Format("{0}/{1}?api_key=" + API_KEY + "&", API_URL, endpoint);
+                var URL = string.Format("{0}/{1}?api_key={2}&", API_URL, endpoint, API_KEY);
 
                 foreach (var item in parameters)
                 {
-                    var paramss = string.Format("{0}={1}&", item.Key, item.Value);
-                    URL = URL + paramss;
+                    var param = string.Format("{0}={1}&", item.Key, item.Value);
+                    URL = URL + param;
                 }
 
                 client.Timeout = TimeSpan.FromMinutes(3);

@@ -1,10 +1,8 @@
 ﻿using ATMoviess.Models;
 using ATMoviess.Services;
 using ATMoviess.Services.Navigation;
-using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
@@ -13,37 +11,24 @@ namespace ATMoviess.ViewModels
     public class MainPageViewModel : ViewModelBase
     {
         INavigationService navigation;
+        MoviesService moviesService;
 
         public MainPageViewModel(INavigationService _navigation)
         {
             navigation = _navigation;
-
             NavigateToDetailsCommand = new Command(NavigateToDetails);
-            SearchCommand = new Command<string>(SearchMovies);
+            SearchMovieTitleCommand = new Command(SearchMovieTitle);
         }
 
         public async override Task InitializeAsync(object navigationData)
         {
             IsLoading = true;
 
-            Model = navigationData != null ? (MainPageModel)navigationData : new MainPageModel();
-
-            UpcomingMoviesModel result = null;
-
-            if (!string.IsNullOrEmpty(Model.SearchString))
-            {
-                Model.Title = "Search";
-                Model.IsSearchVisible = false;
-                result = await MoviesService.SearchMoviesAsync(Model.SearchString);
-                UpcomingMoviesList = result.Results;
-            }
-            else
-            {
-                Model.Title = "Upcoming movies";
-                Model.IsSearchVisible = true;
-                result = await MoviesService.GetUpcomingMoviesAsync();
-                UpcomingMoviesList = result.Results;
-            }
+            moviesService = new MoviesService();
+            
+            var result = await moviesService.GetUpcomingMoviesAsync();
+            UpcomingMoviesList = result;
+            UpcomingMoviesListFiltered = result;
 
             IsLoading = false;
         }
@@ -51,14 +36,7 @@ namespace ATMoviess.ViewModels
         #region Properties
 
         public Command NavigateToDetailsCommand { get; set; }
-        public Command SearchCommand { get; set; }
-
-        private MainPageModel _model;
-        public MainPageModel Model
-        {
-            get => _model;
-            set => SetProperty(ref _model, value);
-        }
+        public Command SearchMovieTitleCommand { get; set; }
 
         private bool _isLoading;
         public bool IsLoading
@@ -74,6 +52,13 @@ namespace ATMoviess.ViewModels
             set => SetProperty(ref _upcomingMoviesList, value);
         }
 
+        private List<Result> _upcomingMoviesListFiltered;
+        public List<Result> UpcomingMoviesListFiltered
+        {
+            get => _upcomingMoviesListFiltered;
+            set => SetProperty(ref _upcomingMoviesListFiltered, value);
+        }
+
         #endregion
 
         #region Methods
@@ -83,10 +68,10 @@ namespace ATMoviess.ViewModels
             await navigation.NavigateToAsync<MovieDetailsViewModel>(parameter);
         }
 
-        public async void SearchMovies(string param)
+        public void SearchMovieTitle(object parameter)
         {
-            Model.SearchString = param;
-            await navigation.NavigateToAsync<MainPageViewModel>(Model);
+            var newText = parameter as string;
+            UpcomingMoviesList = UpcomingMoviesListFiltered.Where(x => x.Title.ToLower().Contains(newText.ToLower())).ToList();
         }
 
         #endregion
