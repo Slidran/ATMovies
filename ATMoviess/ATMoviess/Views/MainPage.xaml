@@ -14,7 +14,7 @@
     
     <StackLayout VerticalOptions="FillAndExpand">
 
-        <ActivityIndicator VerticalOptions="FillAndExpand" HeightRequest="100" WidthRequest="100" IsVisible="{Binding IsLoading}" Color="#3FACFF" IsRunning="True" />
+        <ActivityIndicator VerticalOptions="CenterAndExpand" HeightRequest="60" WidthRequest="60" IsVisible="{Binding IsLoading}" Color="#3FACFF" IsRunning="True" />
 
         <StackLayout Spacing="0" IsVisible="{Binding IsLoading, Converter={StaticResource InverseBooleanConverter}}">
             <SearchBar x:Name="SearchBar" Placeholder="Movie title" TextChanged="SearchBar_TextChanged" />
