@@ -77,6 +77,7 @@ namespace ATMoviess.ViewModels
 
         public void SearchMovieTitle()
         {
+            SearchText = SearchText ?? string.Empty;
             UpcomingMoviesList = UpcomingMoviesListFiltered.Where(x => x.Title.ToLower().Contains(SearchText.ToLower())).ToList();
         }
 
