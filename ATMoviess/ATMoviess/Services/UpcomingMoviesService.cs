@@ -35,7 +35,6 @@ namespace ATMoviess.Services
         /// <returns>Ordered list of upcoming movies</returns>
         public async Task<List<Result>> GetUpcomingMoviesAsync()
         {
-            
             var parameters = new Dictionary<string, object>();
             parameters.Add("language", "en-US");
             parameters.Add("page", 1);

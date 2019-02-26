@@ -37,14 +37,7 @@ namespace ATMoviess.ViewModels
 
         public Command NavigateToDetailsCommand { get; set; }
         public Command SearchMovieTitleCommand { get; set; }
-
-        private bool _isLoading;
-        public bool IsLoading
-        {
-            get => _isLoading;
-            set => SetProperty(ref _isLoading, value);
-        }
-
+        
         private List<Result> _upcomingMoviesList;
         public List<Result> UpcomingMoviesList
         {
@@ -59,6 +52,20 @@ namespace ATMoviess.ViewModels
             set => SetProperty(ref _upcomingMoviesListFiltered, value);
         }
 
+        private bool _isLoading;
+        public bool IsLoading
+        {
+            get => _isLoading;
+            set => SetProperty(ref _isLoading, value);
+        }
+
+        private string _searchText;
+        public string SearchText
+        {
+            get => _searchText;
+            set => SetProperty(ref _searchText, value);
+        }
+
         #endregion
 
         #region Methods
@@ -68,10 +75,9 @@ namespace ATMoviess.ViewModels
             await navigation.NavigateToAsync<MovieDetailsViewModel>(parameter);
         }
 
-        public void SearchMovieTitle(object parameter)
+        public void SearchMovieTitle()
         {
-            var newText = parameter as string;
-            UpcomingMoviesList = UpcomingMoviesListFiltered.Where(x => x.Title.ToLower().Contains(newText.ToLower())).ToList();
+            UpcomingMoviesList = UpcomingMoviesListFiltered.Where(x => x.Title.ToLower().Contains(SearchText.ToLower())).ToList();
         }
 
         #endregion

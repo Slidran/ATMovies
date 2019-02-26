@@ -15,7 +15,7 @@ namespace ATMoviess.Views
 
         private void SearchBar_TextChanged(object sender, TextChangedEventArgs e)
         {
-            ViewModel.SearchMovieTitleCommand.Execute(e.NewTextValue);
+            ViewModel.SearchMovieTitleCommand.Execute(null);
         }
 
         private void ListView_ItemTapped(object sender, ItemTappedEventArgs e)
