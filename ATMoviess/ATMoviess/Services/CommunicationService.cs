@@ -1,8 +1,6 @@
-﻿using ATMoviess.Services.Navigation;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace ATMoviess.Services
@@ -12,6 +10,12 @@ namespace ATMoviess.Services
         private const string API_URL = "https://api.themoviedb.org/3";
         private const string API_KEY = "1f54bd990f1cdfb230adb312546d765d";
 
+        /// <summary>
+        /// Common method to get TMDB API information asynchronously
+        /// </summary>
+        /// <param name="endpoint">Endpoint you want to call</param>
+        /// <param name="parameters">Params you need to send</param>
+        /// <returns></returns>
         public static async Task<HttpResponseMessage> GetAsync(string endpoint, Dictionary<string, object> parameters)
         {
             HttpClientHandler handler = new HttpClientHandler();
