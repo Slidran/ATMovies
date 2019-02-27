@@ -11,13 +11,17 @@
             <converter:InverseBooleanConverter x:Key="InverseBooleanConverter" />
         </ResourceDictionary>
     </ContentPage.Resources>
-    
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Search" Order="Primary" Icon="search.png" />
+    </ContentPage.ToolbarItems>
+
     <StackLayout VerticalOptions="FillAndExpand">
 
         <ActivityIndicator VerticalOptions="CenterAndExpand" HeightRequest="60" WidthRequest="60" IsVisible="{Binding IsLoading}" Color="#3FACFF" IsRunning="True" />
 
         <StackLayout Spacing="0" IsVisible="{Binding IsLoading, Converter={StaticResource InverseBooleanConverter}}">
-            <SearchBar Text="{Binding SearchText}" Placeholder="Movie title" TextChanged="SearchBar_TextChanged" />
+            <SearchBar Text="{Binding SearchText}" Placeholder="Filter upcoming movies" TextChanged="SearchBar_TextChanged" />
         </StackLayout>
         
         <ListView SeparatorVisibility="Default"
@@ -25,6 +29,8 @@
                   ItemsSource="{Binding UpcomingMoviesList}"
                   RowHeight="150"
                   ItemTapped="ListView_ItemTapped"
+                  CachingStrategy="RecycleElement"
+                  ItemAppearing="ListView_ItemAppearing"
                   IsVisible="{Binding IsLoading, Converter={StaticResource InverseBooleanConverter}}">
             <ListView.ItemTemplate>
                 <DataTemplate>
@@ -32,11 +38,11 @@
                         <Grid>
                             <ffimageloading:CachedImage 
                                 VerticalOptions="CenterAndExpand" 
-                                Source="{Binding Backdrop_path}"
+                                Source="{Binding BackdropPath}"
                                 Aspect="AspectFill"
                                 Opacity="0.3"
                             />
-                            <StackLayout Padding="15,10" HorizontalOptions="FillAndExpand">
+                            <StackLayout Padding="16,8" HorizontalOptions="FillAndExpand">
                                 <Label VerticalOptions="FillAndExpand" 
                                    VerticalTextAlignment="Center" 
                                    Text="{Binding Title}" 
@@ -47,7 +53,7 @@
                                    FontSize="16" />
                                 <Label VerticalOptions="FillAndExpand" 
                                    VerticalTextAlignment="Center" 
-                                   Text="{Binding ReleaseDate, StringFormat='{0:dddd, MMMM dd - yyyy}'}" 
+                                   Text="{Binding ReleaseDateConverted, StringFormat='{0:dddd, MMMM dd - yyyy}'}" 
                                    FontSize="16" />
                             </StackLayout>
                         </Grid>

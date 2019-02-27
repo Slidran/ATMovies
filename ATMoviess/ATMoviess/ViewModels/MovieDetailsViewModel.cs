@@ -15,13 +15,13 @@ namespace ATMoviess.ViewModels
 
         public async override Task InitializeAsync(object navigationData)
         {
-            MovieDetails = navigationData as Result;
+            MovieDetails = navigationData as Movie;
         }
 
         #region Properties
         
-        private Result _movieDetails;
-        public Result MovieDetails
+        private Movie _movieDetails;
+        public Movie MovieDetails
         {
             get => _movieDetails;
             set => SetProperty(ref _movieDetails, value);

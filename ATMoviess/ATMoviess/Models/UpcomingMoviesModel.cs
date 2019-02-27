@@ -5,55 +5,59 @@ namespace ATMoviess.Models
 {
     public class UpcomingMoviesModel
     {
-        public List<Result> Results { get; set; }
+        public List<Movie> Results { get; set; }
         public int Page { get; set; }
-        public int Total_results { get; set; }
-        public Dates Dates { get; set; }
-        public int Total_pages { get; set; }
+        public int TotalResults { get; set; }
+        public int TotalPages { get; set; }
     }
 
-    public class Result
+    public class Movie
     {
-        public int Vote_count { get; set; }
+        private const string URL_TMDB_IMAGE_PATH = "http://image.tmdb.org/t/p/w500";
+        private const string NO_POSTER_IMAGE = "noposter.png";
+        private const string NO_BACKDROP_IMAGE = "nobackdrop.png";
+        private const string NO_OVERVIEW_TEXT = "No overview found.";
+
+        public int VoteCount { get; set; }
         public int Id { get; set; }
         public bool Video { get; set; }
-        public double Vote_average { get; set; }
+        public double VoteAverage { get; set; }
         public string Title { get; set; }
         public double Popularity { get; set; }
-        private string _poster_path;
-        public string Poster_path
+        private string _posterPath;
+        public string PosterPath
         {
             get
             {
-                if (string.IsNullOrEmpty(_poster_path))
-                    return "noposter.png";
+                if (string.IsNullOrEmpty(_posterPath))
+                    return NO_POSTER_IMAGE;
 
-                return "http://image.tmdb.org/t/p/w500" + _poster_path;
+                return URL_TMDB_IMAGE_PATH + _posterPath;
             }
             set
             {
-                _poster_path = value;
+                _posterPath = value;
             }
         }
-        public string Original_language { get; set; }
-        public string Original_title { get; set; }
-        public List<int> Genre_ids { get; set; }
-        private string _backdrop_path;
-        public string Backdrop_path { 
+        public string OriginalLanguage { get; set; }
+        public string OriginalTitle { get; set; }
+        public List<int> GenreIds { get; set; }
+        private string _backdropPath;
+        public string BackdropPath { 
             get
             {
-                if (string.IsNullOrEmpty(_backdrop_path))
+                if (string.IsNullOrEmpty(_backdropPath))
                 {
-                    if (Poster_path == "noposter.png")
-                        return "nobackdrop.png";
+                    if (PosterPath == NO_POSTER_IMAGE)
+                        return NO_BACKDROP_IMAGE;
                     else
-                        return Poster_path;
+                        return PosterPath;
                 }
-                return "http://image.tmdb.org/t/p/w500" + _backdrop_path;
+                return URL_TMDB_IMAGE_PATH + _backdropPath;
             }
             set
             {
-                _backdrop_path = value;
+                _backdropPath = value;
             }
         }
         public bool Adult { get; set; }
@@ -63,7 +67,7 @@ namespace ATMoviess.Models
             get
             {
                 if (string.IsNullOrEmpty(_overview))
-                    return "No overview found.";
+                    return NO_OVERVIEW_TEXT;
                 else
                     return _overview;
             }
@@ -72,28 +76,22 @@ namespace ATMoviess.Models
                 _overview = value;
             }
         }
-        public string Release_date { get; set; }
-        public DateTime ReleaseDate
+        public string ReleaseDate { get; set; }
+        public DateTime ReleaseDateConverted
         {
             get
             {
                 try
                 {
-                    var convertedDate = Convert.ToDateTime(Release_date);
+                    var convertedDate = Convert.ToDateTime(ReleaseDate);
                     return convertedDate;
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     return DateTime.MinValue;
                 }
             }
         }
         public string Genres { get; set; }
-    }
-
-    public class Dates
-    {
-        public string Maximum { get; set; }
-        public string Minimum { get; set; }
     }
 }

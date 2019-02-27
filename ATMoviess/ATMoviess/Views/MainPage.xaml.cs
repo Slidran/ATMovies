@@ -22,5 +22,10 @@ namespace ATMoviess.Views
         {
             ViewModel.NavigateToDetailsCommand.Execute(e.Item);
         }
+
+        private void ListView_ItemAppearing(object sender, ItemVisibilityEventArgs e)
+        {
+            ViewModel.LoadMoreCommand.Execute(e.Item);
+        }
     }
 }

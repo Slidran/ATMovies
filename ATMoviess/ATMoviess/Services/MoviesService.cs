@@ -1,5 +1,6 @@
 ﻿using ATMoviess.Models;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ATMoviess.Services
 {
-    public class MoviesService
+    public class MoviesService : IMoviesService
     {
         private List<Genre> GenresList { get; set; }
         
@@ -15,7 +16,7 @@ namespace ATMoviess.Services
         /// Gets the list of genres
         /// </summary>
         /// <returns></returns>
-        private async Task GetGenresAsync()
+        public async Task GetGenresAsync()
         {
             var parameters = new Dictionary<string, object>();
             parameters.Add("language", "en-US");
@@ -31,40 +32,30 @@ namespace ATMoviess.Services
         /// Orders the list by release date. Does not filter region.
         /// </summary>
         /// <returns>Ordered list of upcoming movies</returns>
-        public async Task<List<Result>> GetUpcomingMoviesAsync()
+        public async Task<UpcomingMoviesModel> GetUpcomingMoviesAsync(int pageNumber)
         {
             var parameters = new Dictionary<string, object>();
             parameters.Add("language", "en-US");
-            parameters.Add("page", 1);
+            parameters.Add("page", pageNumber);
+            //parameters.Add("region", "US");
 
             var content = await CommunicationService.GetAsync("movie/upcoming", parameters);
             var response = await content.Content.ReadAsStringAsync();
 
-            var result = JsonConvert.DeserializeObject<UpcomingMoviesModel>(response);
+            DefaultContractResolver contractResolver = new DefaultContractResolver { NamingStrategy = new SnakeCaseNamingStrategy() };
+            var jsonSerializerSettings = new JsonSerializerSettings { ContractResolver = contractResolver };
 
-            for (int i = 2; i <= result.Total_pages; i++)
-            {
-                parameters = new Dictionary<string, object>();
-                parameters.Add("language", "en-US");
-                parameters.Add("page", i);
-
-                content = await CommunicationService.GetAsync("movie/upcoming", parameters);
-                response = await content.Content.ReadAsStringAsync();
-
-                var moreResults = JsonConvert.DeserializeObject<UpcomingMoviesModel>(response);
-
-                result.Results.AddRange(moreResults.Results);
-            }
+            var result = JsonConvert.DeserializeObject<UpcomingMoviesModel>(response, jsonSerializerSettings);
 
             if (GenresList == null)
                 await GetGenresAsync();
             
             foreach (var item in result.Results)
             {
-                foreach (var item2 in item.Genre_ids)
+                foreach (var item2 in item.GenreIds)
                 {
                     var genre = GenresList.Where(x => x.Id == item2).FirstOrDefault();
-                    item.Genres = item2 == item.Genre_ids.Last() ? item.Genres + genre.Name : item.Genres + genre.Name + ", ";
+                    item.Genres = item2 == item.GenreIds.Last() ? item.Genres + genre.Name : item.Genres + genre.Name + ", ";
                 }
                 if (string.IsNullOrEmpty(item.Genres))
                 {
@@ -72,9 +63,9 @@ namespace ATMoviess.Services
                 }
             }
 
-            result.Results = result.Results.Where(x => x.ReleaseDate >= DateTime.Today).OrderBy(x => x.ReleaseDate).ToList();
+            result.Results = result.Results.Where(x => x.ReleaseDateConverted >= DateTime.Today).ToList();
 
-            return result.Results;
+            return result;
         }
 
         /// <summary>
@@ -98,10 +89,10 @@ namespace ATMoviess.Services
 
             foreach (var item in result.Results)
             {
-                foreach (var item2 in item.Genre_ids)
+                foreach (var item2 in item.GenreIds)
                 {
                     var genre = GenresList.Where(x => x.Id == item2).FirstOrDefault();
-                    item.Genres = item2 == item.Genre_ids.Last() ? item.Genres + genre.Name : item.Genres + genre.Name + ", ";
+                    item.Genres = item2 == item.GenreIds.Last() ? item.Genres + genre.Name : item.Genres + genre.Name + ", ";
                 }
                 if (string.IsNullOrEmpty(item.Genres))
                 {

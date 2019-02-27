@@ -10,7 +10,7 @@
             <StackLayout>
                 <ffimageloading:CachedImage 
                 VerticalOptions="Start" 
-                Source="{Binding MovieDetails.Poster_path}"
+                Source="{Binding MovieDetails.PosterPath}"
                 Aspect="AspectFit"
                 HeightRequest="300"
                 Margin="0,8,0,0"
@@ -21,7 +21,7 @@
                 <StackLayout HeightRequest="2" BackgroundColor="#cccccc" HorizontalOptions="FillAndExpand" Margin="16,0" />
                 <Label Text="{Binding MovieDetails.Genres}" HorizontalTextAlignment="Center" FontSize="16" />
                 <StackLayout HeightRequest="2" BackgroundColor="#cccccc" HorizontalOptions="FillAndExpand" Margin="16,0" />
-                <Label Text="{Binding MovieDetails.ReleaseDate, StringFormat='{0:dddd, MMMM dd - yyyy}'}}" HorizontalTextAlignment="Center" FontSize="16" />
+                <Label Text="{Binding MovieDetails.ReleaseDateConverted, StringFormat='{0:dddd, MMMM dd - yyyy}'}}" HorizontalTextAlignment="Center" FontSize="16" />
                 <StackLayout HeightRequest="2" BackgroundColor="#cccccc" HorizontalOptions="FillAndExpand" Margin="16,0" />
                 <Label Text="{Binding MovieDetails.Overview}" HorizontalTextAlignment="Center" FontSize="16" Margin="16,8" />
             </StackLayout>

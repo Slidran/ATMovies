@@ -41,7 +41,7 @@ namespace ATMoviess.Services.Navigation
                 throw new Exception($"{viewModelType} isn't mapped to a page");
 
             Page page = Activator.CreateInstance(pageType) as Page;
-            ViewModelBase viewModel = Locator.Instance.Resolve(viewModelType) as ViewModelBase;
+            ViewModelBase viewModel = ViewModelLocator.Instance.Resolve(viewModelType) as ViewModelBase;
             page.BindingContext = viewModel;
             return page;
         }

@@ -7,9 +7,9 @@ namespace ATMoviess.ViewModels
 {
     public abstract class ViewModelBase : INotifyPropertyChanged
     {
-        public async virtual Task InitializeAsync(object navigationData)
+        public virtual Task InitializeAsync(object navigationData)
         {
-            await Task.FromResult(false);
+            return Task.FromResult(false);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

@@ -12,7 +12,7 @@ namespace ATMoviess
         {
             InitializeComponent();
             
-            var navigationService = Locator.Instance.Resolve<INavigationService>();
+            var navigationService = ViewModelLocator.Instance.Resolve<INavigationService>();
             navigationService.InitializeAsync();
         }
 

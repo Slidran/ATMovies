@@ -4,16 +4,17 @@ using System;
 
 namespace ATMoviess.Services
 {
-    public class Locator
+    public class ViewModelLocator
     {
         private static Container container;
 
-        public static Locator Instance { get; } = new Locator();
+        public static ViewModelLocator Instance { get; } = new ViewModelLocator();
 
-        public Locator()
+        public ViewModelLocator()
         {
             container = new Container();
             container.Register<INavigationService, NavigationService>(Lifestyle.Singleton);
+            container.Register<IMoviesService, MoviesService>(Lifestyle.Transient);
         }
 
         public object Resolve(Type type) => container.GetInstance(type);
