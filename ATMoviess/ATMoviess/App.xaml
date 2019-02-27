@@ -4,5 +4,50 @@
              x:Class="ATMoviess.App">
     <Application.Resources>
 
+        <!--Fonts-->
+        <OnPlatform x:TypeArguments="x:String" x:Key="NunitoBlack">
+            <On Platform="Android" Value="Nunito-Black.ttf#Nunito-Black" />
+            <On Platform="iOS" Value="Nunito-Black" />
+        </OnPlatform>
+        <OnPlatform x:TypeArguments="x:String" x:Key="NunitoBold">
+            <On Platform="Android" Value="Nunito-Bold.ttf#Nunito-Bold" />
+            <On Platform="iOS" Value="Nunito-Bold" />
+        </OnPlatform>
+        <OnPlatform x:TypeArguments="x:String" x:Key="NunitoExtraBold">
+            <On Platform="Android" Value="Nunito-ExtraBold.ttf#Nunito-ExtraBold" />
+            <On Platform="iOS" Value="Nunito-ExtraBold" />
+        </OnPlatform>
+        <OnPlatform x:TypeArguments="x:String" x:Key="NunitoExtraLight">
+            <On Platform="Android" Value="Nunito-ExtraLight.ttf#Nunito-ExtraLight" />
+            <On Platform="iOS" Value="Nunito-ExtraLight" />
+        </OnPlatform>
+        <OnPlatform x:TypeArguments="x:String" x:Key="NunitoItalic">
+            <On Platform="Android" Value="Nunito-Italic.ttf#Nunito-Italic" />
+            <On Platform="iOS" Value="Nunito-Italic" />
+        </OnPlatform>
+        <OnPlatform x:TypeArguments="x:String" x:Key="NunitoLight">
+            <On Platform="Android" Value="Nunito-Light.ttf#Nunito-Light" />
+            <On Platform="iOS" Value="Nunito-Light" />
+        </OnPlatform>
+        <OnPlatform x:TypeArguments="x:String" x:Key="NunitoRegular">
+            <On Platform="Android" Value="Nunito-Regular.ttf#Nunito-Regular" />
+            <On Platform="iOS" Value="Nunito-Regular" />
+        </OnPlatform>
+        <OnPlatform x:TypeArguments="x:String" x:Key="NunitoSemiBold">
+            <On Platform="Android" Value="Nunito-SemiBold.ttf#Nunito-SemiBold" />
+            <On Platform="iOS" Value="Nunito-SemiBold" />
+        </OnPlatform>
+        <!--//Fonts-->
+
+        <Style TargetType="Label">
+            <Setter Property="FontFamily" Value="{StaticResource NunitoRegular}" />
+            <Setter Property="FontSize" Value="16" />
+        </Style>
+
+        <Style TargetType="SearchBar">
+            <Setter Property="FontFamily" Value="{StaticResource NunitoRegular}" />
+            <Setter Property="FontSize" Value="16" />
+        </Style>
+
     </Application.Resources>
 </Application>
