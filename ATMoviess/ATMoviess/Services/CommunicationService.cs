@@ -8,7 +8,7 @@ namespace ATMoviess.Services
     public static class CommunicationService
     {
         private const string API_URL = "https://api.themoviedb.org/3";
-        private const string API_KEY = "1f54bd990f1cdfb230adb312546d765d";
+        private const string API_KEY = "ede4188f86c09925c3f0420c9ec95c6b";
 
         /// <summary>
         /// Common method to get TMDB API information asynchronously
