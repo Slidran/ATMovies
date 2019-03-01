@@ -71,6 +71,13 @@ namespace ATMoviess.ViewModels
             set => SetProperty(ref _isLoading, value);
         }
 
+        private bool _isBusy;
+        public bool IsBusy
+        {
+            get => _isBusy;
+            set => SetProperty(ref _isBusy, value);
+        }
+
         private string _searchText;
         public string SearchText
         {
@@ -109,7 +116,14 @@ namespace ATMoviess.ViewModels
 
         public async void LoadMore(object parameter)
         {
-            //TODO: Put a IsBusy indicator so it does not load two times if something happens
+            if (IsBusy)
+                return;
+
+            if (!string.IsNullOrEmpty(SearchText))
+                return;
+
+            IsBusy = true;
+
             var movieItem = parameter as Movie;
             if (movieItem == UpcomingMoviesList.Last() && PageNumber <= TotalPages)
             {
@@ -120,8 +134,10 @@ namespace ATMoviess.ViewModels
                 foreach (var item in upcomingMovies.Results)
                 {
                     UpcomingMoviesList.Add(item);
+                    UpcomingMoviesListFiltered.Add(item);
                 }
             }
+            IsBusy = false;
         }
 
         #endregion
